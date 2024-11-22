@@ -1,0 +1,46 @@
+// Definindo os pinos
+const int trigPin = 9;
+const int echoPin = 10;
+const int ledPin = 13;
+
+void setup() {
+  // Inicializando os pinos
+  pinMode(trigPin, OUTPUT);  // Pino do Trigger como saída
+  pinMode(echoPin, INPUT);   // Pino do Echo como entrada
+  pinMode(ledPin, OUTPUT);   // Pino do LED como saída
+
+  Serial.begin(9600);        // Inicializa a comunicação serial
+}
+
+void loop() {
+  // Limpando o pino Trigger
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  
+  // Enviando o pulso de Trigger
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Calculando a duração do pulso de Echo
+  long duration = pulseIn(echoPin, HIGH);
+  
+  // Calculando a distância
+  long distance = (duration / 2) * 0.0344;  // Distância em cm (velocidade do som 0.0344 cm/us)
+
+  // Exibindo a distância no monitor serial
+  Serial.print("Distância: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  // Condição para acionar o LED
+  if (distance < 10) {  // Se a distância for menor que 10 cm
+    digitalWrite(ledPin, HIGH);  // Acende o LED
+  } else {
+    digitalWrite(ledPin, LOW);   // Apaga o LED
+  }
+
+  delay(500);  // Atraso de meio segundo para evitar leituras muito rápidas
+}
+    
+
